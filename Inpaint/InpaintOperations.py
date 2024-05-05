@@ -1,23 +1,42 @@
-from PIL import Image  
+import cv2
+
 class InpaintOperations:
     @staticmethod
     def create_mask_from_image(image_path, output_path):
-        # Open the input image
-        image = Image.open(image_path).convert("RGB")
-        width, height = image.size
+        # Open the input image using OpenCV
+        image = cv2.imread(image_path)
         
-        # Create a new image for the mask
-        mask = Image.new("RGB", (width, height))
+        # Check if image was successfully loaded
+        if image is None:
+            raise FileNotFoundError(f"Could not open or find the image: {image_path}")
+        
+        # Get image dimensions
+        height = image.shape[0]
+        width  = image.shape[1]
+        
+        # Create a new blank mask image
+        mask = [[255 for _ in range(width)] for _ in range(height)]
         
         # Process each pixel to create the mask
         for y in range(height):
             for x in range(width):
-                r, g, b = image.getpixel((x, y))
-                if (r, g, b) == (0, 0, 0):
-                    # Non-black pixels become white in the mask
-                    mask.putpixel((x, y), (255, 255, 255))
+                # Get pixel intensity values
+                b, g, r = image[y, x]
+                
+                 # Check if the pixel is black
+                if (b, g, r) == (0, 0, 0):
+                    # Set the pixel to white in the mask
+                    mask[y][x] = 255
                 else:
-                    # Black pixels remain black
-                    mask.putpixel((x, y), (0, 0, 0))
-            # Save the generated mask
-        mask.save(output_path)
+                    # Set the pixel to black in the mask
+                    mask[y][x] = 0
+
+    
+
+        
+        # Save the mask to a PGM file
+        with open(output_path, 'w') as f:
+            f.write(f'P2\n{width} {height}\n255\n')
+            for row in mask:
+                f.write(' '.join(map(str, row)) + '\n')
+        

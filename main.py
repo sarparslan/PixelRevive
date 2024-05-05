@@ -1,7 +1,6 @@
 import os
 import time
 from tkinter import Image
-from PIL import Image  # PIL kütüphanesinden Image modülünü ekleyin
 
 from Bitwise_Not.BitwiseNotOperations import BitwiseNotOperations
 from Inpaint.InpaintOperations import InpaintOperations
@@ -28,8 +27,8 @@ if(operation == str(1)):
     modified_bmp = BitwiseNotOperations.bitwise_not(bmp_data)
 
     # Writing the modified BMP data back to a new file.
+    BitwiseNotOperations.write_bmp(output_path, modified_bmp)   
     print("\nOutput image has been saved in the path : "+output_path)
-    BitwiseNotOperations.write_bmp(output_path, modified_bmp)    
 
 
  
@@ -41,16 +40,22 @@ if(operation == str(1)):
 # dots -> 8 
 # lena -> 8   
 
-#   Bitwise_Not_Inputs/lena.bmp
-#else:
-print("Inpaint Operation is loading...")
-output_path = '/Users/sarparslan/Downloads/'
+    
+else:
+    image_path = '/Users/sarparslan/Downloads/cat_damaged.png'
+  #  output_path = '/Users/sarparslan/Downloads/cat_damaged_mask.jpg'
+    print("Inpaint Operation is loading for the image_path : "+image_path)
+    time.sleep(1)
+    filename_with_extension = os.path.basename(image_path)
+     # Spliting the filename to remove the extension
+    fileName, _ = os.path.splitext(filename_with_extension)
+    output_path = 'Inpaint/Inpaint_Masks/'+fileName+"_mask.jpeg"
+    time.sleep(1)
 
-# Kullanım Örneği:
-image_path = '/Users/sarparslan/Downloads/cat_damaged.png'
-output_path = 'Inpaint/Inpaint_Outputs/cat_damaged_mask.png'
 
-
-
-# Generate the mask
-InpaintOperations.create_mask_from_image(image_path, output_path)    
+    # Generate the mask
+    InpaintOperations.create_mask_from_image(image_path, output_path)    
+    print("Mask has been created in "+output_path)
+    time.sleep(1)
+    print("\nAppliyng First Marching Method...")
+    
