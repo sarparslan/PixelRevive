@@ -7,7 +7,7 @@ from Inpaint.InpaintOperations import InpaintOperations
 
 
 
-operation = input("Enter operation : \nbitwise_not -> 1 \t inpaint -> 2 : \n")
+operation = input("Enter operation : \nbitwise_not 1 \t inpaint 2 : ")
 
 if(operation == str(1)):
     image_path = input("Enter the image path of your target image (It must be in bmp format): ")
@@ -41,9 +41,9 @@ if(operation == str(1)):
 # lena -> 8   
 
     
-else:
+elif(operation == str(2)):
     image_path = '/Users/sarparslan/Downloads/cat_damaged.png'
-  #  output_path = '/Users/sarparslan/Downloads/cat_damaged_mask.jpg'
+  #  output_path = '/Users/sarparslan/Downloads/temp_mask.jpeg'
     print("Inpaint Operation is loading for the image_path : "+image_path)
     time.sleep(1)
     filename_with_extension = os.path.basename(image_path)
@@ -58,4 +58,9 @@ else:
     print("Mask has been created in "+output_path)
     time.sleep(1)
     print("\nAppliyng First Marching Method...")
-    
+    result_path = '/Users/sarparslan/Downloads/result.png'
+    InpaintOperations.first_marching_method(image_path, output_path,result_path)    
+    print("Restored Image has been created in "+result_path)
+
+else:
+    print("Entered a different character")
